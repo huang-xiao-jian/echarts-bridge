@@ -1,0 +1,27 @@
+env:
+  browser: true
+  es6: true
+  jasmine: true
+  node: true
+extends:
+  - 'eslint:recommended'
+parserOptions:
+  ecmaVersion: 6
+  sourceType: module
+globals:
+  _: true
+# plugins:
+rules:
+  indent:
+    - error
+    - 2
+    - SwitchCase: 1
+  linebreak-style:
+    - error
+    - unix
+  quotes:
+    - error
+    - single
+  semi:
+    - error
+    - always
