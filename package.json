@@ -36,5 +36,8 @@
     "rollup": "^0.36.0",
     "rollup-plugin-babel": "^2.6.1",
     "rollup-watch": "^2.5.0"
+  },
+  "dependencies": {
+    "@bornkiller/observable": "^0.1.1"
   }
 }
