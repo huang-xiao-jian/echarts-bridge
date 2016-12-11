@@ -8,9 +8,8 @@ extends:
 parserOptions:
   ecmaVersion: 6
   sourceType: module
-globals:
-  _: true
-# plugins:
+  ecmaFeatures:
+    experimentalObjectRestSpread: true
 rules:
   indent:
     - error
