@@ -2,8 +2,19 @@
 // Generated on Tue Sep 20 2016 18:36:39 GMT+0800 (CST)
 
 const babel = require('rollup-plugin-babel');
+const istanbul = require('rollup-plugin-istanbul');
+const resolve = require('rollup-plugin-node-resolve');
+const commonjs = require('rollup-plugin-commonjs');
 
-module.exports = function(config) {
+const isCIMode = process.env.NODE_ENV === 'KARMA_CI';
+const BASE_ROLLUP_PLUGINS = [
+  resolve({ jsnext: true, main: true }),
+  commonjs({
+    include: 'node_modules/@bornkiller/**',
+  })
+];
+
+module.exports = function (config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
@@ -17,32 +28,42 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'test/*.spec.js'
+      { pattern: 'src/*.js', includes: false },
+      { pattern: 'test/*.spec.js' }
     ],
 
 
     // list of files to exclude
-    exclude: [
-    ],
+    exclude: [],
 
 
-    // preprocess matching files before serving them to the browser
+    // pre-process matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'test/*.spec.js': ['rollup', 'sourcemap']
+      'src/*.js': ['rollup'],
+      'test/*.spec.js': ['rollup']
     },
-  
+
     rollupPreprocessor: {
-      plugins: [babel()],
+      plugins: isCIMode ? [...BASE_ROLLUP_PLUGINS, istanbul({ exclude: ['test/*.spec.js'] }), babel()] : [...BASE_ROLLUP_PLUGINS, babel()],
       format: 'iife',
-      sourceMap: 'inline'
+      sourceMap: 'inline',
+      moduleName: 'bk.stream'
     },
 
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress'],
+    reporters: ['progress', 'coverage'],
+
+    coverageReporter: {
+      dir: 'coverage',
+      reporters: [
+        { type: 'html', subdir: 'html' },
+        { type: 'lcov', subdir: 'lcov' }
+      ]
+    },
 
 
     // web server port
@@ -69,10 +90,10 @@ module.exports = function(config) {
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
-    singleRun: false,
+    singleRun: isCIMode,
 
     // Concurrency level
     // how many browser should be started simultaneous
     concurrency: Infinity
-  })
+  });
 };
