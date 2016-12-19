@@ -2,9 +2,38 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>$Title$</title>
+  <title>echarts stream operation</title>
+  <script src="https://cdn.bootcss.com/echarts/3.3.2/echarts.min.js"></script>
 </head>
 <body>
-$END$
+<article class="container">
+  <div class="echarts-box" style="height: 300px"></div>
+</article>
+<script type="application/javascript">
+  (function () {
+    let element = document.querySelector('.echarts-box');
+    let instance = echarts.init(element);
+    
+    instance.setOption({
+      xAxis: [
+        {
+          type: 'category',
+          boundaryGap: false,
+          data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+        }
+      ],
+      yAxis: {
+        type: 'value'
+      },
+      series: [
+        {
+          name: '邮件营销',
+          type: 'line',
+          stack: '总量',
+          data: [120, 132, 101, 134, 90, 230, 210]
+        }]
+    });
+  })();
+</script>
 </body>
 </html>
