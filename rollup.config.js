@@ -21,8 +21,10 @@ export default {
   ],
   moduleId: 'bk.stream',
   moduleName: 'bk.stream',
-  external: [],
-  globals: {},
+  external: ['echarts'],
+  globals: {
+    'echarts': 'echarts'
+  },
   targets: [
     { format: 'umd', dest: 'dist/stream.bundle.js' },
     { format: 'es', dest: 'dist/stream.bundle.esm.js' }

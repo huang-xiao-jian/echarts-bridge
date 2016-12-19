@@ -10,7 +10,7 @@ export default function assign(expression, value) {
   let field = list[0];
 
   if (list.length === 1) {
-    return { [field]: value }
+    return { [field]: value };
   } else {
     return { [field]: assign(list.slice(1).join('.'), value) };
   }

@@ -45,5 +45,8 @@
   "dependencies": {
     "@bornkiller/observable": "^0.3.1",
     "lodash-es": "^4.17.2"
+  },
+  "peerDependencies": {
+    "echarts": "^3.0.0"
   }
 }
