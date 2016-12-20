@@ -10,37 +10,48 @@ export class Stream extends Observable {
   /**
    * @description - stream instance
    *
-   * @param {object} config - stream config
-   * @param {object} options - echarts base options
+   * @param {string} theme - echarts theme
+   * @param {object} initOptions - stream config
+   * @param {object} instanceOptions - echarts base options
    * @param {object} mediaOptions - echarts media options
    */
-  constructor(config, options, mediaOptions) {
+  constructor(theme, initOptions = {}, instanceOptions = {}, mediaOptions = []) {
     super();
-    this._config = config;
-    this._options = options;
-    this._mediaOptions = mediaOptions;
-    this._initialized = false;
+    this.initialized = false;
+    this.theme = theme;
+    this.initOptions = initOptions;
+    this.instanceOptions = instanceOptions;
+    this.mediaOptions = mediaOptions;
     this._instance = {};
   }
-  
+
   /**
    * @description - 代理echarts初始化函数，只需要传入关键element即可
    *
    * @param {HTMLElement} element
    */
   init(element) {
-    this._initialized = true;
-    this._instance = echarts.init(element, this._config.theme);
+    this._instance = echarts.init(element, this.theme, this.initOptions);
+
+    this._instance.setOption({
+      baseOption: this.instanceOptions,
+      media: this.mediaOptions
+    });
   }
-  
+
   get $delegate() {
-    return this._initialized ? this._instance : undefined;
+    return Reflect.construct(Proxy, this._instance, {});
   }
-  
-  
+
   /**
-   * @description - 创建stream对象
+   * @description - static method create stream
+   *
+   * @param {string} theme - echarts theme
+   * @param {object} initOptions - stream config
+   * @param {object} instanceOptions - echarts base options
+   * @param {object} mediaOptions - echarts media options
    */
-  static create() {
+  static create(theme, initOptions = {}, instanceOptions = {}, mediaOptions = []) {
+    return Reflect.construct(Stream, [theme, initOptions, instanceOptions, mediaOptions]);
   }
 }
