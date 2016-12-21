@@ -12,15 +12,13 @@ export class Stream extends Observable {
    *
    * @param {string} theme - echarts theme
    * @param {object} initOptions - stream config
-   * @param {object} instanceOptions - echarts base options
    * @param {object} mediaOptions - echarts media options
    */
-  constructor(theme, initOptions = {}, instanceOptions = {}, mediaOptions = []) {
+  constructor(theme, initOptions = {}, mediaOptions = []) {
     super();
     this.initialized = false;
     this.theme = theme;
     this.initOptions = initOptions;
-    this.instanceOptions = instanceOptions;
     this.mediaOptions = mediaOptions;
     this._instance = {};
   }
@@ -48,10 +46,9 @@ export class Stream extends Observable {
    *
    * @param {string} theme - echarts theme
    * @param {object} initOptions - stream config
-   * @param {object} instanceOptions - echarts base options
    * @param {object} mediaOptions - echarts media options
    */
-  static create(theme, initOptions = {}, instanceOptions = {}, mediaOptions = []) {
-    return Reflect.construct(Stream, [theme, initOptions, instanceOptions, mediaOptions]);
+  static create(theme, initOptions = {}, mediaOptions = []) {
+    return Reflect.construct(Stream, [theme, initOptions, mediaOptions]);
   }
 }
