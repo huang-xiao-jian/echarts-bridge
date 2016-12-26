@@ -4,9 +4,8 @@
  */
 
 import echarts from 'echarts';
-import { Observable } from '@bornkiller/observable';
 
-export class Stream extends Observable {
+export class Stream {
   /**
    * @description - stream instance
    *
@@ -15,12 +14,14 @@ export class Stream extends Observable {
    * @param {object} mediaOptions - echarts media options
    */
   constructor(theme, initOptions = {}, mediaOptions = []) {
-    super();
-    this.initialized = false;
     this.theme = theme;
     this.initOptions = initOptions;
     this.mediaOptions = mediaOptions;
+
+    // flag stand for instance initialize
+    this._pristine = true;
     this._instance = {};
+    this._bufferOptions = [];
   }
 
   /**
@@ -30,25 +31,39 @@ export class Stream extends Observable {
    */
   init(element) {
     this._instance = echarts.init(element, this.theme, this.initOptions);
+    this._instance.setOption({ media: this.mediaOptions });
 
-    this._instance.setOption({
-      baseOption: this.instanceOptions,
-      media: this.mediaOptions
-    });
+    // consume buffer option and clean up
+    for (let option of this._bufferOptions) {
+      this._instance.setOption(option);
+    }
+
+    this._pristine = false;
+    this._bufferOptions = [];
+
+    return this.$delegate;
   }
 
-  get $delegate() {
-    return Reflect.construct(Proxy, this._instance, {});
+  // proxy handler onto setOption
+  setOption(...args) {
+    if (this._pristine) {
+      // buffer option operate with merge and sync mode,
+      this._bufferOptions.push(args[0]);
+    } else {
+      Reflect.apply(this._instance.setOption, this._instance, args);
+    }
+
+    return this.$delegate;
   }
 
   /**
-   * @description - static method create stream
-   *
-   * @param {string} theme - echarts theme
-   * @param {object} initOptions - stream config
-   * @param {object} mediaOptions - echarts media options
+   * @description - intercept echarts instance setOption method
+   *  - support lazy setOption before init
+   *  - support setOption chain call while echarts not
    */
-  static create(theme, initOptions = {}, mediaOptions = []) {
-    return Reflect.construct(Stream, [theme, initOptions, mediaOptions]);
+  get $delegate() {
+    return this._pristine
+      ? { init: this.init.bind(this), setOption: this.setOption.bind(this) }
+      : { ...this._instance, setOption: this.setOption.bind(this) };
   }
 }
