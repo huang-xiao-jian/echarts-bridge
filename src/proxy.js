@@ -4,10 +4,12 @@
  */
 export class MonkeyPatchAgent {
   constructor() {
+    // middleware echarts instance
     this.instance = {};
-
     // flag stand for element initialize
     this.connected = false;
+    // stock history options for controller cache or ng HMR
+    this.history = {};
     this.restoreBufferVariable();
     this.lazyMethodList = [
       'getWidth', 'getHeight', 'getDom', 'getOption','getDataURL', 'getConnectedDataURL',
@@ -76,6 +78,15 @@ export class MonkeyPatchAgent {
    */
   setOption(...args) {
     this.connected ? Reflect.apply(this.instance.setOption, this.instance, args) : this.bufferOptions.push(args);
+    this.connected && (this.history = Reflect.apply(this.instance.getOption, this.instance, []));
+    return this;
+  }
+  
+  /**
+   * @description - 暴力方式处理controller缓存可能引发的潜在问题
+   */
+  replay() {
+    this.instance.setOption(this.history);
     return this;
   }
 
@@ -86,6 +97,7 @@ export class MonkeyPatchAgent {
    */
   showLoading(...args) {
     this.connected ? Reflect.apply(this.instance.showLoading, this.instance, args) : (this.bufferLoadingSwitchery = args);
+    return this;
   }
 
   /**
@@ -94,7 +106,8 @@ export class MonkeyPatchAgent {
    * @see - http://echarts.baidu.com/api.html#echartsInstance.hideLoading
    */
   hideLoading() {
-    this.connected ? Reflect.apply(this.instance.hideLoading, this.instance) : (this.bufferLoadingSwitchery = []);
+    this.connected ? Reflect.apply(this.instance.hideLoading, this.instance, []) : (this.bufferLoadingSwitchery = []);
+    return this;
   }
 
   /**
@@ -113,8 +126,13 @@ export class MonkeyPatchAgent {
    */
   dispose() {
     this.connected && this.instance.dispose();
+    this.instance = {};
     this.connected = false;
     // reset buffer content
     this.restoreBufferVariable();
+    // 剔除延迟加载方法
+    this.lazyMethodList.forEach((key) => {
+      Reflect.deleteProperty(this, key);
+    });
   }
 }
