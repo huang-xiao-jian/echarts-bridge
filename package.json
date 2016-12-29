@@ -24,7 +24,6 @@
   },
   "homepage": "https://github.com/bornkiller/echarts-stream#readme",
   "devDependencies": {
-    "babel-plugin-transform-regenerator": "^6.16.1",
     "babel-preset-es2015-bk": "^1.3.0",
     "eslint": "^3.12.0",
     "jasmine-core": "^2.5.2",
@@ -43,7 +42,6 @@
     "rollup-watch": "^2.5.0"
   },
   "dependencies": {
-    "@bornkiller/observable": "^0.3.1",
     "lodash-es": "^4.17.2"
   },
   "peerDependencies": {
