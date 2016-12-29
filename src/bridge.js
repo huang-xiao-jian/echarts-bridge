@@ -4,9 +4,9 @@
  */
 
 import echarts from 'echarts';
-import { MonkeyPatchAgent } from './proxy';
+import { MonkeyPatchBridge } from './proxy';
 
-export class Stream extends MonkeyPatchAgent {
+export class Bridge extends MonkeyPatchBridge {
   /**
    * @description - stream instance
    *

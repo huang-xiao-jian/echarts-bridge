@@ -113,8 +113,8 @@
     ]
   };
 
-  let stream1 = Reflect.construct(bk.stream.Stream, []);
-  let stream2 = Reflect.construct(bk.stream.Stream, []);
+  let stream1 = Reflect.construct(bk.echarts.Bridge, []);
+  let stream2 = Reflect.construct(bk.echarts.Bridge, []);
   
   stream1.group = 'example';
   stream2.group = 'example';

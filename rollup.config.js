@@ -19,14 +19,14 @@ export default {
     }),
     babel()
   ],
-  moduleId: 'bk.stream',
-  moduleName: 'bk.stream',
+  moduleId: 'bk.echarts',
+  moduleName: 'bk.echarts',
   external: ['echarts'],
   globals: {
     'echarts': 'echarts'
   },
   targets: [
-    { format: 'umd', dest: 'dist/stream.bundle.js' },
-    { format: 'es', dest: 'dist/stream.bundle.esm.js' }
+    { format: 'umd', dest: 'dist/bridge.bundle.js' },
+    { format: 'es', dest: 'dist/bridge.bundle.esm.js' }
   ]
 };

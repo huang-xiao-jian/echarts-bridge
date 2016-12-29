@@ -2,7 +2,7 @@
  * @description - proxy echarts instance, make none-element operation available
  * @author - bornkiller <hjj491229492@hotmail.com>
  */
-export class MonkeyPatchAgent {
+export class MonkeyPatchBridge {
   constructor() {
     // middleware echarts instance
     this.instance = {};
