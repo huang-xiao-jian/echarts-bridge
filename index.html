@@ -91,14 +91,19 @@
       ]
     };
     
+//    let instance = echarts.init(element);
+    
+//    instance.setOption(options);
+    
+//    window.instance =instance;
     let stream = Reflect.construct(bk.stream.Stream, []);
-    
-    stream = stream.setOption(options);
-    
-    setTimeout(() => {
-      stream = stream.init(element).setOption({title: {text: 'Lazy Stream'}});
-    }, 1000);
-    
+
+    stream.setOption(options).connect(element);
+//
+//    setTimeout(() => {
+//      stream = stream.init(element).setOption({title: {text: 'Lazy Stream'}});
+//    }, 1000);
+//
     window.stream = stream;
   })();
 </script>
