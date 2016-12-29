@@ -1,11 +1,12 @@
 /**
- * @description - echarts option stream engine
+ * @description - echarts lite data operator
  * @author - bornkiller <hjj491229492@hotmail.com>
  */
 
 import echarts from 'echarts';
+import { MonkeyPatchAgent } from './proxy';
 
-export class Stream {
+export class Stream extends MonkeyPatchAgent {
   /**
    * @description - stream instance
    *
@@ -14,14 +15,10 @@ export class Stream {
    * @param {object} mediaOptions - echarts media options
    */
   constructor(theme, initOptions = {}, mediaOptions = []) {
+    super();
     this.theme = theme;
     this.initOptions = initOptions;
     this.mediaOptions = mediaOptions;
-
-    // flag stand for instance initialize
-    this._pristine = true;
-    this._instance = {};
-    this._bufferOptions = [];
   }
 
   /**
@@ -29,41 +26,25 @@ export class Stream {
    *
    * @param {HTMLElement} element
    */
-  init(element) {
-    this._instance = echarts.init(element, this.theme, this.initOptions);
-    this._instance.setOption({ media: this.mediaOptions });
-
-    // consume buffer option and clean up
-    for (let option of this._bufferOptions) {
-      this._instance.setOption(option);
+  connect(element) {
+    if (!(element instanceof HTMLElement)) {
+      throw new Error('HTMLElement argument required');
     }
 
-    this._pristine = false;
-    this._bufferOptions = [];
+    this.middlware = echarts.init(element, this.theme, this.initOptions);
+    this.middlware.setOption({ media: this.mediaOptions });
 
-    return this.$delegate;
-  }
+    super.transferCoreBridge(this.middlware);
+    super.dealWithInventory();
 
-  // proxy handler onto setOption
-  setOption(...args) {
-    if (this._pristine) {
-      // buffer option operate with merge and sync mode,
-      this._bufferOptions.push(args[0]);
-    } else {
-      Reflect.apply(this._instance.setOption, this._instance, args);
-    }
-
-    return this.$delegate;
+    return this;
   }
 
   /**
-   * @description - intercept echarts instance setOption method
-   *  - support lazy setOption before init
-   *  - support setOption chain call while echarts not
+   * @description - 销毁应用实例
    */
-  get $delegate() {
-    return this._pristine
-      ? { init: this.init.bind(this), setOption: this.setOption.bind(this) }
-      : { ...this._instance, setOption: this.setOption.bind(this) };
+  disconnect() {
+    super.clear();
+    super.dispose();
   }
 }
