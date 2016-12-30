@@ -17,7 +17,7 @@ export class MonkeyPatchBridge {
     this.restoreBufferVariable();
     this.lazyMethodList = [
       'getWidth', 'getHeight', 'getDom', 'getOption', 'getDataURL', 'getConnectedDataURL',
-      'convertToPixel', 'convertFromPixel', 'containPixel', 'isDisposed'
+      'convertToPixel', 'convertFromPixel', 'containPixel', 'isDisposed', 'dispatchAction'
     ];
   }
 
