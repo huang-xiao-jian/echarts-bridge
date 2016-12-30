@@ -13,7 +13,7 @@ export class MonkeyPatchBridge {
     this.restoreBufferVariable();
     this.lazyMethodList = [
       'getWidth', 'getHeight', 'getDom', 'getOption','getDataURL', 'getConnectedDataURL',
-      'convertToPixel', 'convertFromPixel', 'containPixel', 'isDisposed', 'resize'
+      'convertToPixel', 'convertFromPixel', 'containPixel', 'isDisposed'
     ];
   }
 
@@ -23,6 +23,8 @@ export class MonkeyPatchBridge {
   restoreBufferVariable() {
     // buffer instance group setting
     this.bufferGroupCategory = '';
+    // buffer DOM width and height setting
+    this.bufferVisionSize = [];
     // buffer loading status switcher
     this.bufferLoadingSwitchery = [];
     // buffer options setting
@@ -51,6 +53,7 @@ export class MonkeyPatchBridge {
    */
   dealWithInventory() {
     this.group = this.bufferGroupCategory;
+    this.bufferVisionSize.length && this.resize(...this.bufferVisionSize);
     this.bufferLoadingSwitchery.length && this.showLoading(...this.bufferLoadingSwitchery);
     this.bufferOptions.length && this.bufferOptions.forEach((args) => this.setOption(...args));
 
@@ -79,6 +82,16 @@ export class MonkeyPatchBridge {
   setOption(...args) {
     this.connected ? Reflect.apply(this.instance.setOption, this.instance, args) : this.bufferOptions.push(args);
     this.connected && (this.history = Reflect.apply(this.instance.getOption, this.instance, []));
+    return this;
+  }
+
+  /**
+   * @description - 暴力方式缓冲resize调用
+   *
+   * @see - http://echarts.baidu.com/api.html#echartsInstance.resize
+   */
+  resize(...args) {
+    this.connected ? Reflect.apply(this.instance.resize, this.instance, args) : this.bufferVisionSize = args;
     return this;
   }
   
@@ -117,6 +130,7 @@ export class MonkeyPatchBridge {
    */
   clear() {
     this.connected && this.instance.clear();
+    return this;
   }
 
   /**
