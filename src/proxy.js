@@ -2,6 +2,10 @@
  * @description - proxy echarts instance, make none-element operation available
  * @author - bornkiller <hjj491229492@hotmail.com>
  */
+'use strict';
+
+import { isFunction } from './util';
+
 export class MonkeyPatchBridge {
   constructor() {
     // middleware echarts instance
@@ -12,7 +16,7 @@ export class MonkeyPatchBridge {
     this.history = {};
     this.restoreBufferVariable();
     this.lazyMethodList = [
-      'getWidth', 'getHeight', 'getDom', 'getOption','getDataURL', 'getConnectedDataURL',
+      'getWidth', 'getHeight', 'getDom', 'getOption', 'getDataURL', 'getConnectedDataURL',
       'convertToPixel', 'convertFromPixel', 'containPixel', 'isDisposed'
     ];
   }
@@ -25,6 +29,8 @@ export class MonkeyPatchBridge {
     this.bufferGroupCategory = '';
     // buffer DOM width and height setting
     this.bufferVisionSize = [];
+    // buffer event listener
+    this.bufferEventListen = [];
     // buffer loading status switcher
     this.bufferLoadingSwitchery = [];
     // buffer options setting
@@ -56,6 +62,7 @@ export class MonkeyPatchBridge {
     this.bufferVisionSize.length && this.resize(...this.bufferVisionSize);
     this.bufferLoadingSwitchery.length && this.showLoading(...this.bufferLoadingSwitchery);
     this.bufferOptions.length && this.bufferOptions.forEach((args) => this.setOption(...args));
+    this.bufferEventListen.length && this.bufferEventListen.forEach((stock) => this.on(stock.eventName, stock.handler));
 
     this.restoreBufferVariable();
   }
@@ -88,13 +95,55 @@ export class MonkeyPatchBridge {
   /**
    * @description - 暴力方式缓冲resize调用
    *
-   * @see - http://echarts.baidu.com/api.html#echartsInstance.resize
+   * @see - http://echarts.baidu.com/api.html#echartsInstance.on
    */
   resize(...args) {
     this.connected ? Reflect.apply(this.instance.resize, this.instance, args) : this.bufferVisionSize = args;
     return this;
   }
-  
+
+  /**
+   * @description - 缓冲事件绑定
+   *
+   * @see - http://echarts.baidu.com/api.html#echartsInstance.on
+   *
+   * @param {string} eventName
+   * @param {function} handler
+   *
+   * @return {MonkeyPatchBridge}
+   */
+  on(eventName, handler) {
+    if (this.connected) {
+      Reflect.apply(this.instance.on, this.instance, [eventName, handler]);
+    } else {
+      this.bufferEventListen = [...this.bufferEventListen, { eventName, handler }];
+    }
+
+    return this;
+  }
+
+  /**
+   * @description - 缓冲事件解绑
+   *
+   * @see - http://echarts.baidu.com/api.html#echartsInstance.off
+   *
+   * @param {string} eventName
+   * @param {function} handler
+   *
+   * @return {MonkeyPatchBridge}
+   */
+  off(eventName, handler) {
+    if (this.connected) {
+      Reflect.apply(this.instance.off, this.instance, [eventName, handler]);
+    } else {
+      this.bufferEventListen = this.bufferEventListen.filter((stock) => {
+        return isFunction(handler) ? !(stock.eventName === eventName && stock.handler === handler) : !(stock.eventName === eventName);
+      });
+    }
+
+    return this;
+  }
+
   /**
    * @description - 暴力方式处理controller缓存可能引发的潜在问题
    */
