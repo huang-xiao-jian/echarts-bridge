@@ -68,7 +68,7 @@ export class MonkeyPatchBridge {
   }
 
   /**
-   * @description - 暴力方式处理分组标记
+   * @description - 缓冲分组标记
    *
    * @see - http://echarts.baidu.com/api.html#echartsInstance.group
    */
@@ -82,7 +82,7 @@ export class MonkeyPatchBridge {
   }
 
   /**
-   * @description - 暴力方式缓冲setOption调用
+   * @description - 缓冲setOption调用
    *
    * @see - http://echarts.baidu.com/api.html#echartsInstance.setOption
    */
@@ -93,7 +93,7 @@ export class MonkeyPatchBridge {
   }
 
   /**
-   * @description - 暴力方式缓冲resize调用
+   * @description - 式缓冲resize调用
    *
    * @see - http://echarts.baidu.com/api.html#echartsInstance.on
    */
@@ -145,7 +145,7 @@ export class MonkeyPatchBridge {
   }
 
   /**
-   * @description - 暴力方式处理controller缓存可能引发的潜在问题
+   * @description - 处理controller实例重连接引发的潜在问题
    */
   replay() {
     this.instance.setOption(this.history);
@@ -153,7 +153,7 @@ export class MonkeyPatchBridge {
   }
 
   /**
-   * @description - 暴力方式缓冲showLoading调用
+   * @description - 缓冲showLoading调用
    *
    * @see - http://echarts.baidu.com/api.html#echartsInstance.showLoading
    */
@@ -163,7 +163,7 @@ export class MonkeyPatchBridge {
   }
 
   /**
-   * @description - 暴力方式缓冲hideLoading调用
+   * @description - 缓冲hideLoading调用
    *
    * @see - http://echarts.baidu.com/api.html#echartsInstance.hideLoading
    */
@@ -173,7 +173,7 @@ export class MonkeyPatchBridge {
   }
 
   /**
-   * @description - 暴力方式缓冲clear调用
+   * @description - 缓冲clear调用
    *
    * @see - http://echarts.baidu.com/api.html#echartsInstance.clear
    */
@@ -183,7 +183,7 @@ export class MonkeyPatchBridge {
   }
 
   /**
-   * @description - 暴力方式缓冲dispose调用
+   * @description - 缓冲dispose调用
    *
    * @see - http://echarts.baidu.com/api.html#echartsInstance.dispose
    */
