@@ -158,7 +158,7 @@ export class MonkeyPatchBridge {
    * @see - http://echarts.baidu.com/api.html#echartsInstance.showLoading
    */
   showLoading(...args) {
-    this.connected ? Reflect.apply(this.instance.showLoading, this.instance, args) : (this.bufferLoadingSwitchery = args);
+    this.connected ? Reflect.apply(this.instance.showLoading, this.instance, args) : (this.bufferLoadingSwitchery = args.length ? args : ['default']);
     return this;
   }
 

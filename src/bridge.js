@@ -12,12 +12,14 @@ export class Bridge extends MonkeyPatchBridge {
    * @description - echarts bridge instance
    *
    * @param {string} theme - echarts theme
-   * @param {object} initOptions - stream config
+   * @param {object} initOptions - echarts init options
+   * @param {object} mediaOptions - echarts media options
    */
-  constructor(theme, initOptions = {}) {
+  constructor(theme, initOptions = {}, mediaOptions = []) {
     super();
     this.theme = theme;
     this.initOptions = initOptions;
+    this.mediaOptions = mediaOptions;
     this.uuid = uuid();
   }
 
@@ -31,7 +33,13 @@ export class Bridge extends MonkeyPatchBridge {
       throw new Error('HTMLElement argument required');
     }
 
-    super.transferCoreBridge(echarts.init(element, this.theme, this.initOptions));
+    // 此处为部分hack操作
+    // 限定媒体查询，简易声明对象时直接指定，而不是后续控制
+    this.middleware = echarts.init(element, this.theme, this.initOptions);
+    this.middleware.setOption({ series: [] });
+    this.middleware.setOption({ media: this.mediaOptions });
+    // 传递实例，消费缓存数据
+    super.transferCoreBridge(this.middleware);
     super.dealWithInventory();
 
     return this;
