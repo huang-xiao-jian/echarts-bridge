@@ -4,15 +4,6 @@
 const babel = require('rollup-plugin-babel');
 const istanbul = require('rollup-plugin-istanbul');
 const resolve = require('rollup-plugin-node-resolve');
-const commonjs = require('rollup-plugin-commonjs');
-
-const isCIMode = process.env.NODE_ENV === 'KARMA_CI';
-const BASE_ROLLUP_PLUGINS = [
-  resolve({ jsnext: true, main: true }),
-  commonjs({
-    include: 'node_modules/@bornkiller/**',
-  })
-];
 
 module.exports = function (config) {
   config.set({
@@ -28,8 +19,8 @@ module.exports = function (config) {
 
     // list of files / patterns to load in the browser
     files: [
-      { pattern: 'src/*.js', includes: false },
-      { pattern: 'test/*.spec.js' }
+      'node_modules/echarts/dist/echarts.js',
+      'test/*.spec.js'
     ],
 
 
@@ -37,25 +28,33 @@ module.exports = function (config) {
     exclude: [],
 
 
-    // pre-process matching files before serving them to the browser
+    // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'src/*.js': ['rollup'],
-      'test/*.spec.js': ['rollup']
+      'test/*.spec.js': ['rollup', 'sourcemap']
     },
 
     rollupPreprocessor: {
-      plugins: isCIMode ? [...BASE_ROLLUP_PLUGINS, istanbul({ exclude: ['test/*.spec.js'] }), babel()] : [...BASE_ROLLUP_PLUGINS, babel()],
+      plugins: [
+        resolve({ jsnext: true, main: true }),
+        istanbul({
+          exclude: ['test/*.spec.js', 'node_modules/**/*']
+        }),
+        babel()
+      ],
+      external: ['echarts'],
+      globals: {
+        echarts: 'echarts'
+      },
       format: 'iife',
-      sourceMap: 'inline',
-      moduleName: 'bk.stream'
+      sourceMap: 'inline'
     },
 
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress', 'coverage'],
+    reporters: ['coverage'],
 
     coverageReporter: {
       dir: 'coverage',
@@ -90,7 +89,7 @@ module.exports = function (config) {
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
-    singleRun: isCIMode,
+    singleRun: false,
 
     // Concurrency level
     // how many browser should be started simultaneous
