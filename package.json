@@ -1,6 +1,6 @@
 {
   "name": "@bornkiller/echarts-bridge",
-  "version": "0.1.0",
+  "version": "0.5.0",
   "description": "echarts imperative programming bridge in MV* frontend framework.",
   "main": "dist/bridge.bundle.js",
   "jsnext:main": "index.js",
