@@ -3,7 +3,7 @@
  */
 'use strict';
 
-import { isFunction, uuid } from '../src/util';
+import { isFunction, uuid } from '../index';
 
 describe('util methods', function () {
   it('should judge function type', function () {
