@@ -5,20 +5,20 @@
 
 import echarts from 'echarts';
 import { MonkeyPatchBridge } from './proxy';
+import { uuid } from './util';
 
 export class Bridge extends MonkeyPatchBridge {
   /**
-   * @description - stream instance
+   * @description - echarts bridge instance
    *
    * @param {string} theme - echarts theme
    * @param {object} initOptions - stream config
-   * @param {object} mediaOptions - echarts media options
    */
-  constructor(theme, initOptions = {}, mediaOptions = []) {
+  constructor(theme, initOptions = {}) {
     super();
     this.theme = theme;
     this.initOptions = initOptions;
-    this.mediaOptions = mediaOptions;
+    this.uuid = uuid();
   }
 
   /**
@@ -31,10 +31,7 @@ export class Bridge extends MonkeyPatchBridge {
       throw new Error('HTMLElement argument required');
     }
 
-    this.middlware = echarts.init(element, this.theme, this.initOptions);
-    this.middlware.setOption({ media: this.mediaOptions });
-
-    super.transferCoreBridge(this.middlware);
+    super.transferCoreBridge(echarts.init(element, this.theme, this.initOptions));
     super.dealWithInventory();
 
     return this;

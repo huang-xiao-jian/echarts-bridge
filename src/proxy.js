@@ -14,6 +14,8 @@ export class MonkeyPatchBridge {
     this.connected = false;
     // stock history options for controller cache or ng HMR
     this.history = {};
+    // buffer event listener, stock history event listen for re-connect
+    this.bufferEventListen = [];
     this.restoreBufferVariable();
     this.lazyMethodList = [
       'getWidth', 'getHeight', 'getDom', 'getOption', 'getDataURL', 'getConnectedDataURL',
@@ -29,8 +31,6 @@ export class MonkeyPatchBridge {
     this.bufferGroupCategory = '';
     // buffer DOM width and height setting
     this.bufferVisionSize = [];
-    // buffer event listener
-    this.bufferEventListen = [];
     // buffer loading status switcher
     this.bufferLoadingSwitchery = [];
     // buffer options setting
