@@ -26,7 +26,7 @@ export default {
     'echarts': 'echarts'
   },
   targets: [
-    { format: 'umd', dest: 'dist/bridge.bundle.js' },
-    { format: 'es', dest: 'dist/bridge.bundle.esm.js' }
+    { format: 'iife', dest: 'dist/bridge.bundle.js' },
+    { format: 'umd', dest: 'dist/bridge.bundle.umd.js' }
   ]
 };
