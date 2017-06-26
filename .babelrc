@@ -1,3 +1,39 @@
 {
-  "presets": ["es2015-bk"]
+  "presets": [
+    [
+      "env",
+      {
+        "modules": false,
+        "loose": true
+      }
+    ],
+    "stage-3"
+  ],
+  "env": {
+    "dev": {
+      "plugins": [
+        "transform-class-properties"
+      ]
+    },
+    "prod": {
+      "plugins": [
+        "transform-runtime",
+        "transform-class-properties"
+      ]
+    },
+    "test": {
+      "plugins": [
+        [
+          "istanbul",
+          {
+            "exclude": [
+              "**/*.spec.js",
+              "node_modules/**/*.js"
+            ]
+          }
+        ],
+        "transform-class-properties"
+      ]
+    }
+  }
 }

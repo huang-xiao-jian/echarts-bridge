@@ -1,32 +1,28 @@
 /**
- * @description - observable package rollup configuration
+ * @description - rollup configuration
  * @author - bornkiller <hjj491229492@hotmail.com>
  */
-import eslint from 'rollup-plugin-eslint';
-import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
-import babel from 'rollup-plugin-babel';
 
-export default {
+const babel = require('rollup-plugin-babel');
+const eslint = require('rollup-plugin-eslint');
+const resolve = require('rollup-plugin-node-resolve');
+
+module.exports = {
   entry: 'index.js',
   plugins: [
     eslint({
-      include: ['index.js', 'src/*.js', 'test/*.js']
+      include: ['index.js', 'src/*.js']
     }),
-    resolve({ jsnext: true, main: true }),
-    commonjs({
-      include: 'node_modules/@bornkiller/**',
-    }),
-    babel()
+    resolve(),
+    babel({
+      exclude: ['**/*.css', '**/*.scss'],
+      runtimeHelpers: true
+    })
   ],
-  moduleId: 'bk.echarts',
-  moduleName: 'bk.echarts',
-  external: ['echarts'],
-  globals: {
-    'echarts': 'echarts'
+  external: (id) => {
+    return ['echarts', 'babel-runtime'].some((name) => id.startsWith(name));
   },
   targets: [
-    { format: 'iife', dest: 'dist/bridge.bundle.js' },
-    { format: 'umd', dest: 'dist/bridge.bundle.umd.js' }
+    { dest: 'dist/bridge.common.js', format: 'cjs' }
   ]
 };
