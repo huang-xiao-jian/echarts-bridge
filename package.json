@@ -1,6 +1,6 @@
 {
   "name": "@universal/echarts-bridge",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "echarts imperative programming bridge in MV* frontend framework.",
   "main": "bundle/bridge.common.js",
   "jsnext:main": "bundle/bridge.esm.js",
