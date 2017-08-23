@@ -23,6 +23,7 @@ module.exports = {
     return ['echarts', 'babel-runtime'].some((name) => id.startsWith(name));
   },
   targets: [
-    { dest: 'dist/bridge.common.js', format: 'cjs' }
+    { dest: 'bundle/bridge.common.js', format: 'cjs' },
+    { dest: 'bundle/bridge.esm.js', format: 'es' }
   ]
 };

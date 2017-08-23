@@ -1,10 +1,9 @@
 {
-  "name": "@bornkiller/echarts-bridge",
+  "name": "@universal/echarts-bridge",
   "version": "0.8.0",
   "description": "echarts imperative programming bridge in MV* frontend framework.",
-  "main": "dist/bridge.common.js",
-  "jsnext:main": "index.js",
-  "browser": "index.js",
+  "main": "bundle/bridge.common.js",
+  "jsnext:main": "bundle/bridge.esm.js",
   "scripts": {
     "prepublish": "NODE_ENV=prod rollup -c rollup.config.js",
     "test-travis": "karma start karma.conf.js --browsers Firefox --single-run"
