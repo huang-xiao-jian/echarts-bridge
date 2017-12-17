@@ -7,6 +7,9 @@
 
 echarts imperative programming bridge in MV* frontend framework.
 
+## Break Changes
+调整入口配置，默认为`commonjs`风格。
+
 ## 目标
 前端`MV*`框架，共同点都是不提倡直接进行底层`DOM`操作，只能通过框架提供接口(如`angularjs`指令)，访问原始元素，但是对待图表这种重`DOM`操作，使用数据同步的方式
 进行，效率个人持保留意见。
