@@ -18,7 +18,7 @@ echarts imperative programming bridge in MV* frontend framework.
 
 ## API
 ```javascript
-import { Bridge } from '@bornkiller/echarts-bridge';
+import { Bridge } from 'echarts-bridge';
 
 /**
   * @description - echarts bridge instance
@@ -47,5 +47,5 @@ instance.setOption({}).on('click', () => {}).connect(elem);
 ## 关联项目
 目前关联项目为基于`angularjs`的封装: [echarts-ng](https://github.com/bornkiller/echarts-ng) 
 
-## contact
+## Contact
 hjj491229492@hotmail.com
