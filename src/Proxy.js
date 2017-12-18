@@ -113,7 +113,7 @@ export default class Proxy {
    * @param {string} eventName
    * @param {function} handler
    *
-   * @return {MonkeyPatchBridge}
+   * @return {Proxy}
    */
   on(eventName, handler) {
     if (this.connected) {
@@ -133,7 +133,7 @@ export default class Proxy {
    * @param {string} eventName
    * @param {function} handler
    *
-   * @return {MonkeyPatchBridge}
+   * @return {Proxy}
    */
   off(eventName, handler) {
     if (this.connected) {
