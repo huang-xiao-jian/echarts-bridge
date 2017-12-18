@@ -8,10 +8,10 @@ const eslint = require('rollup-plugin-eslint');
 const resolve = require('rollup-plugin-node-resolve');
 
 module.exports = {
-  entry: 'index.js',
+  input: 'src/index.js',
   plugins: [
     eslint({
-      include: ['index.js', 'src/*.js']
+      include: ['src/*.js']
     }),
     resolve(),
     babel({
@@ -22,8 +22,8 @@ module.exports = {
   external: (id) => {
     return ['echarts', 'babel-runtime'].some((name) => id.startsWith(name));
   },
-  targets: [
-    { dest: 'bundle/bridge.common.js', format: 'cjs' },
-    { dest: 'bundle/bridge.esm.js', format: 'es' }
+  output: [
+    { file: 'bundle/echarts-bridge.common.js', format: 'cjs' },
+    { file: 'bundle/echarts-bridge.esm.js', format: 'es' }
   ]
 };

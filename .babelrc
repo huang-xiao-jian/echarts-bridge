@@ -9,16 +9,13 @@
     ],
     "stage-3"
   ],
+  "plugins": [
+    "transform-class-properties"
+  ],
   "env": {
-    "dev": {
+    "production": {
       "plugins": [
-        "transform-class-properties"
-      ]
-    },
-    "prod": {
-      "plugins": [
-        "transform-runtime",
-        "transform-class-properties"
+        "transform-runtime"
       ]
     },
     "test": {
@@ -31,8 +28,7 @@
               "node_modules/**/*.js"
             ]
           }
-        ],
-        "transform-class-properties"
+        ]
       ]
     }
   }

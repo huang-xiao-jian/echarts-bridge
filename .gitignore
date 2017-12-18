@@ -66,6 +66,4 @@ typings/
 # Production
 dist
 build
-browser/*.js
-browser/*.map
 bundle
