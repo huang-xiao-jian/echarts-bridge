@@ -1,12 +1,12 @@
 /**
- * @description - util method for develop
+ * @description - helper method
+ * @author - huang.jian <hjj491229492@hotmail.com>
  */
-'use strict';
 
 /**
- * @description - check if variable is function
+ * @description - determine function variable
  *
- * @param {any} anything
+ * @param {*} anything
  *
  * @return {boolean}
  */
@@ -15,7 +15,7 @@ export function isFunction(anything) {
 }
 
 /**
- * @description - generate uniq identity for easier watch
+ * @description - generate unique identity for easier watch
  *
  * @return {string}
  */

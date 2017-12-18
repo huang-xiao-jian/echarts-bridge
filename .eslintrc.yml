@@ -12,6 +12,7 @@ env:
   node: true
 extends:
   - 'eslint:recommended'
+  - 'airbnb-base'
 rules:
   indent:
     - error
@@ -27,3 +28,7 @@ rules:
   semi:
     - error
     - always
+  arrow-parens:
+    - error
+    - always
+

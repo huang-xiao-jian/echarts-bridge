@@ -1,13 +1,13 @@
 /**
- * @description - echarts lite data operator
- * @author - bornkiller <hjj491229492@hotmail.com>
+ * @description - echarts bridge to cache operation
+ * @author - huang.jian <hjj491229492@hotmail.com>
  */
 
 import echarts from 'echarts';
-import { MonkeyPatchBridge } from './proxy';
+import Proxy from './Proxy';
 import { uuid } from './util';
 
-export class Bridge extends MonkeyPatchBridge {
+export default class Bridge extends Proxy {
   /**
    * @description - echarts bridge instance
    *

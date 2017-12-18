@@ -1,12 +1,12 @@
 /**
  * @description - proxy echarts instance, make none-element operation available
- * @author - bornkiller <hjj491229492@hotmail.com>
+ * @author - huang.jian <hjj491229492@hotmail.com>
  */
-'use strict';
 
+/* eslint-disable no-unused-expressions */
 import { isFunction } from './util';
 
-export class MonkeyPatchBridge {
+export default class Proxy {
   constructor() {
     // middleware echarts instance
     this.instance = {};
@@ -19,8 +19,22 @@ export class MonkeyPatchBridge {
     this.restoreBufferVariable();
     this.lazyMethodList = [
       'getWidth', 'getHeight', 'getDom', 'getOption', 'getDataURL', 'getConnectedDataURL',
-      'convertToPixel', 'convertFromPixel', 'containPixel', 'isDisposed', 'dispatchAction'
+      'convertToPixel', 'convertFromPixel', 'containPixel', 'isDisposed', 'dispatchAction',
     ];
+  }
+
+  /**
+   * @description - 缓冲分组标记
+   *
+   * @see - http://echarts.baidu.com/api.html#echartsInstance.group
+   */
+  get group() {
+    return this.connected ? Reflect.get(this.instance, 'group') : this.bufferGroupCategory;
+  }
+
+  set group(value) {
+    this.connected ? Reflect.set(this.instance, 'group', value) : (this.bufferGroupCategory = value);
+    return value;
   }
 
   /**
@@ -62,23 +76,10 @@ export class MonkeyPatchBridge {
     this.bufferVisionSize.length && this.resize(...this.bufferVisionSize);
     this.bufferLoadingSwitchery.length && this.showLoading(...this.bufferLoadingSwitchery);
     this.bufferOptions.length && this.bufferOptions.forEach((args) => this.setOption(...args));
+    // eslint-disable-next-line max-len
     this.bufferEventListen.length && this.bufferEventListen.forEach((stock) => this.on(stock.eventName, stock.handler));
 
     this.restoreBufferVariable();
-  }
-
-  /**
-   * @description - 缓冲分组标记
-   *
-   * @see - http://echarts.baidu.com/api.html#echartsInstance.group
-   */
-  get group() {
-    return this.connected ? Reflect.get(this.instance, 'group') : this.bufferGroupCategory;
-  }
-
-  set group(value) {
-    this.connected ? Reflect.set(this.instance, 'group', value) : (this.bufferGroupCategory = value);
-    return value;
   }
 
   /**
@@ -87,6 +88,7 @@ export class MonkeyPatchBridge {
    * @see - http://echarts.baidu.com/api.html#echartsInstance.setOption
    */
   setOption(...args) {
+    // eslint-disable-next-line max-len
     this.connected ? Reflect.apply(this.instance.setOption, this.instance, args) : this.bufferOptions.push(args);
     this.connected && (this.history = Reflect.apply(this.instance.getOption, this.instance, []));
     return this;
@@ -98,6 +100,7 @@ export class MonkeyPatchBridge {
    * @see - http://echarts.baidu.com/api.html#echartsInstance.on
    */
   resize(...args) {
+    // eslint-disable-next-line max-len
     this.connected ? Reflect.apply(this.instance.resize, this.instance, args) : this.bufferVisionSize = args;
     return this;
   }
@@ -136,8 +139,11 @@ export class MonkeyPatchBridge {
     if (this.connected) {
       Reflect.apply(this.instance.off, this.instance, [eventName, handler]);
     } else {
+      // eslint-disable-next-line arrow-body-style
       this.bufferEventListen = this.bufferEventListen.filter((stock) => {
-        return isFunction(handler) ? !(stock.eventName === eventName && stock.handler === handler) : !(stock.eventName === eventName);
+        return isFunction(handler)
+          ? !(stock.eventName === eventName && stock.handler === handler)
+          : !(stock.eventName === eventName);
       });
     }
 
@@ -158,6 +164,7 @@ export class MonkeyPatchBridge {
    * @see - http://echarts.baidu.com/api.html#echartsInstance.showLoading
    */
   showLoading(...args) {
+    // eslint-disable-next-line max-len
     this.connected ? Reflect.apply(this.instance.showLoading, this.instance, args) : (this.bufferLoadingSwitchery = args.length ? args : ['default']);
     return this;
   }
@@ -168,6 +175,7 @@ export class MonkeyPatchBridge {
    * @see - http://echarts.baidu.com/api.html#echartsInstance.hideLoading
    */
   hideLoading() {
+    // eslint-disable-next-line max-len
     this.connected ? Reflect.apply(this.instance.hideLoading, this.instance, []) : (this.bufferLoadingSwitchery = []);
     return this;
   }
