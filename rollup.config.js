@@ -19,9 +19,7 @@ module.exports = {
       runtimeHelpers: true
     })
   ],
-  external: (id) => {
-    return ['echarts', 'babel-runtime'].some((name) => id.startsWith(name));
-  },
+  external: (id) => ['echarts', 'babel-runtime'].some((name) => id.startsWith(name)),
   output: [
     { file: 'bundle/echarts-bridge.common.js', format: 'cjs' },
     { file: 'bundle/echarts-bridge.esm.js', format: 'es' }

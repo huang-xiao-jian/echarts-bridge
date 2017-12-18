@@ -19,7 +19,7 @@ export default class Proxy {
     this.restoreBufferVariable();
     this.lazyMethodList = [
       'getWidth', 'getHeight', 'getDom', 'getOption', 'getDataURL', 'getConnectedDataURL',
-      'convertToPixel', 'convertFromPixel', 'containPixel', 'isDisposed', 'dispatchAction',
+      'convertToPixel', 'convertFromPixel', 'containPixel', 'isDisposed', 'dispatchAction'
     ];
   }
 
